@@ -48,14 +48,17 @@ export class LoginPage {
         }
         this.Firebase = require('firebase');
         var ref = new this.Firebase("https://shining-torch-2724.firebaseio.com");
+        let email = this.email, password = this.password;
         ref.authWithPassword({
-            email: this.email,
-            password: this.password
+            email: email,
+            password: password
         }, function(error, authData) {
             if (error) {
                 console.log("Login Failed!", error);
             } else {
                 console.log("Authenticated successfully with payload:", authData);
+                window.localStorage.setItem('email', email);
+                window.localStorage.setItem('password', password);
             }
         });
     }

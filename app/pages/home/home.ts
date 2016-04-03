@@ -9,7 +9,8 @@ export class HomePage {
 	public username;
 
 	constructor(private github: GitHubService,
-				private nav: NavController) {
+				private nav: NavController) {			  
+	  console.log("username:", this.username);
 	}
 
 	getRepos() {

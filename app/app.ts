@@ -19,6 +19,7 @@ export class MyApp {
 	rootPage: any = HomePage;
 	app: any;
 	menu: any;
+	username : string;
 	
 	pages = [
 		{ title: "Login Page", component: LoginPage },
@@ -29,26 +30,36 @@ export class MyApp {
 
 	constructor(menu: MenuController, platform: Platform, app: IonicApp) {
 		this.menu = menu;
-        
+		
 		var userLang = navigator.language.split('-')[0];
 		//Define our list of supported languages:
 		//userLang = /(de|en|hr)/gi.test(userLang) ? userLang : 'en';
 		//translate.setDefaultLang('en');
 		//translate.use(userLang);
+		
+
 
 		platform.ready().then(() => {
 			// Okay, so the platform is ready and our plugins are available.
 			// Here you can do any higher level native things you might need.
 			StatusBar.styleDefault();
 			this.app = app;
+			
+			// Check if we've logged in before
+			this.username = window.localStorage.getItem('email');
+			if (this.username == null) {
+				console.log("Not logged in");
+				this.openPage(this.pages[0]);
+			} else {
+				console.log("Already logged in as " + this.username);
+			}
 		});
 	}
 
 	openPage(page) {
 		this.menu.close();
-
 		let nav = this.app.getComponent('nav');
-		console.log("asdf");
+		console.log("switching tab");
 		nav.setRoot(page.component);
 	}
 
