@@ -1,0 +1,27 @@
+<ion-toolbar>
+    <button menuToggle>
+        <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>{{"title"}}</ion-title>
+</ion-toolbar>
+
+
+
+<ion-content class="home">
+    <ion-list inset>
+        <ion-item>
+            <ion-label floating>Email</ion-label>
+            <ion-input [(ngModel)]="email" type="email"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label floating>Password</ion-label>
+            <ion-input [(ngModel)]="password" type="password"></ion-input>
+        </ion-item>
+    </ion-list>
+    <div padding>
+        <button block (click)="login()">Login</button>
+        <button block (click)="signup()">Sign Up</button>
+    </div>
+</ion-content>
+
+<button menuToggle>Toggle Menu</button>

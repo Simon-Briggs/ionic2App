@@ -1,0 +1,55 @@
+<ion-toolbar>
+    <button menuToggle>
+        <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>{{"title"}}</ion-title>
+</ion-toolbar>
+
+
+
+<ion-content class="home">
+    <ion-list inset>
+        <ion-item>
+            <ion-label>Username</ion-label>
+            <ion-input [(ngModel)]="username" type="text"></ion-input>
+        </ion-item>
+    </ion-list>
+    <div padding>
+        <button block (click)="getRepos()">Search</button>
+    </div>
+    <ion-card *ngFor="#repo of foundRepos" (click)="goToDetails(repo)">
+        <ion-card-header>
+            {{ repo.name }}
+        </ion-card-header>
+        <ion-card-content>
+            {{ repo.description }}
+        </ion-card-content>
+    </ion-card>
+
+    <ion-item>
+        <ion-label floating>Username</ion-label>
+        <ion-input type="text"></ion-input>
+    </ion-item>
+
+    <ion-card>
+        <ion-list>
+            <ion-item>
+                <ion-label>hey</ion-label>
+                <ion-checkbox [(ngModel)]="hey"></ion-checkbox>
+            </ion-item>
+
+            <ion-item>
+                <ion-label>whats</ion-label>
+                <ion-checkbox [(ngModel)]="whats" disabled="true"></ion-checkbox>
+            </ion-item>
+
+            <ion-item>
+                <ion-label>up</ion-label>
+                <ion-checkbox [(ngModel)]="up"></ion-checkbox>
+            </ion-item>
+
+        </ion-list>
+    </ion-card>
+</ion-content>
+
+<button menuToggle>Toggle Menu</button>
