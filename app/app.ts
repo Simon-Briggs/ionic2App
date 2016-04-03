@@ -3,11 +3,8 @@ import {TRANSLATE_PROVIDERS, TranslateService, TranslateLoader, TranslateStaticL
 import {provide} from "angular2/core";
 
 import {StatusBar} from 'ionic-native';
-import {LoginPage} from './pages/login/login';
-import {HomePage} from './pages/home/home';
-import {DetailsPage} from './pages/details/details';
-import {QuizPage} from './pages/quiz/quiz';
 
+import {Constants} from './constants';
 
 @App({
 	templateUrl: 'build/pages/sidebar/sidebar.html',
@@ -16,17 +13,12 @@ import {QuizPage} from './pages/quiz/quiz';
 	providers: [provide(MissingTranslationHandler, { useClass: MyMissingTranslationHandler })]
 })
 export class MyApp {
-	rootPage: any = HomePage;
+	rootPage: any = Constants.pages[1].component;
 	app: any;
 	menu: any;
 	username : string;
 	
-	pages = [
-		{ title: "Login Page", component: LoginPage },
-		{ title: "Home Page", component: HomePage },
-		{ title: "Details Page", component: DetailsPage },
-		{ title: "Quiz Page", component: QuizPage }
-	]
+	pages : Array = Constants.pages;
 
 	constructor(menu: MenuController, platform: Platform, app: IonicApp) {
 		this.menu = menu;
@@ -49,7 +41,7 @@ export class MyApp {
 			this.username = window.localStorage.getItem('email');
 			if (this.username == null) {
 				console.log("Not logged in");
-				this.openPage(this.pages[0]);
+				this.openPage(Constants.pages[0]);
 			} else {
 				console.log("Already logged in as " + this.username);
 			}
