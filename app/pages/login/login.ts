@@ -59,15 +59,19 @@ export class LoginPage {
 				console.log("Authenticated successfully with payload:", authData);
 				window.localStorage.setItem('email', email);
 				window.localStorage.setItem('password', password);
+				
+				this.nav.setRoot(Constants.pages[Constants.HomePage].component);
+				this.nav.popToRoot();
 			}
 		});
 	}
 
 	logout(): void {
-		window.localStorage.removeItem('username');
+		window.localStorage.removeItem('email');
 		window.localStorage.removeItem('password');
 
-		this.nav.setRoot(Constants.pages[0].component);
+		this.nav.setRoot(Constants.pages[Constants.LoginPage].component);
 		this.nav.popToRoot();
+		console.log("Logged out");
 	}
 }

@@ -13,7 +13,7 @@ import {Constants} from './constants';
 	providers: [provide(MissingTranslationHandler, { useClass: MyMissingTranslationHandler })]
 })
 export class MyApp {
-	rootPage: any = Constants.pages[1].component;
+	rootPage: any = Constants.pages[Constants.HomePage].component;
 	app: any;
 	menu: any;
 	username : string;
