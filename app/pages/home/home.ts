@@ -8,7 +8,7 @@ import {GitHubService} from '../../services/github';
 })
 export class HomePage {  
 	public foundRepos;
-	public username;
+	public username : string;
 	public Firebase;
 
 	constructor(private github: GitHubService, private nav: NavController, private http: Http) {			  
@@ -41,6 +41,18 @@ export class HomePage {
 		console.log("The read failed: " + errorObject.code);
 		});
 		
+		// Attach an asynchronous callback to read the data at our posts reference
+		ref.once("value", function(snapshot) {
+		console.log(snapshot.val());
+		}, function (errorObject) {
+		console.log("The read failed: " + errorObject.code);
+		});
+		
+		// Retrieve new posts as they are added to our database
+		ref.on("child_added", function(snapshot, prevChildKey) {
+			var newPost = snapshot.val();
+			console.log("Snapshot.val: ", newPost);
+		});
 		
 		var child = ref.child("test");
 		child.set({
@@ -56,12 +68,41 @@ export class HomePage {
 			}
 		});
 		var key = child.push({
-			unique: "Wrappede by a unique key"
+			unique: "Wrapped by a unique key"
 		}).key();
 		console.log("unique key " , key);
 		var transRef = ref.child("transaction");
 		transRef.transaction(function (current_value) {
 			return (current_value || 0) + 1;
+		});
+		
+		// Create a callback which logs the current auth state
+		function authDataCallback(authData) {
+		if (authData) {
+			console.log("User " + authData.uid + " is logged in with " + authData.provider);
+		} else {
+			console.log("User is logged out");
+		}
+		}
+		// Register the callback to be fired every time auth state changes]
+		ref.onAuth(authDataCallback);
+		
+		var authData = ref.getAuth();
+		if (authData) {
+		console.log("User " + authData.uid + " is logged in with " + authData.provider);
+		} else {
+		console.log("User is logged out");
+		}
+		
+		var presenceRef = new this.Firebase('shining-torch-2724.firebaseio.com/disconnectmessage');
+		// Write a string when this client loses connection
+		presenceRef.onDisconnect().set("I disconnected!");
+		
+		// Remove our disconnect sensor when we close the app gracefully
+		presenceRef.onDisconnect().remove( function(err) {
+		if( err ) {
+			console.error('could not establish onDisconnect event', err);
+		}
 		});
 	}
 	
