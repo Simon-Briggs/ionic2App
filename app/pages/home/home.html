@@ -1,55 +1,74 @@
 <ion-toolbar>
-    <button menuToggle>
-        <ion-icon name="menu"></ion-icon>
-    </button>
-    <ion-title>Welcome</ion-title>
+	<button menuToggle>
+		<ion-icon name="menu"></ion-icon>
+	</button>
+	<ion-title>Welcome</ion-title>
 </ion-toolbar>
-
-
-
+	
 <ion-content class="home">
-    <ion-list inset>
-        <ion-item>
-            <ion-label>Username</ion-label>
-            <ion-input [(ngModel)]="email" type="text"></ion-input>
-        </ion-item>
-    </ion-list>
-    <div padding>
-        <button block (click)="getRepos()">Search</button>
-    </div>
-    <ion-card *ngFor="#repo of foundRepos" (click)="goToDetails(repo)">
-        <ion-card-header>
-            {{ repo.name }}
-        </ion-card-header>
-        <ion-card-content>
-            {{ repo.description }}
-        </ion-card-content>
-    </ion-card>
+	<ion-list inset>
+		<ion-item>
+			<ion-label>Username</ion-label>
+			<ion-input [(ngModel)]="email" type="text"  (change)="onChange()"></ion-input>
+		</ion-item>
+	</ion-list>
+	<div padding>
+		<button block (click)="getRepos()">Search</button>
+	</div>
+	
+	
+	
+	<ion-card *ngFor="#repo of foundRepos" (click)="goToDetails(repo)">
+		<ion-card-header>
+			{{ repo.name }}
+		</ion-card-header>
+		<ion-card-content>
+			{{ repo.description }}
+		</ion-card-content>
+	</ion-card>
 
-    <ion-item>
-        <ion-label floating>Username</ion-label>
-        <ion-input type="text"></ion-input>
-    </ion-item>
+	<ion-item>
+		<ion-label fixed>Website</ion-label>
+		<ion-input maxlength="1" type="number"></ion-input>
+	</ion-item>
 
-    <ion-card>
-        <ion-list>
-            <ion-item>
-                <ion-label>hey</ion-label>
-                <ion-checkbox [(ngModel)]="hey"></ion-checkbox>
-            </ion-item>
+	<ion-item>
+		<ion-label>Rating</ion-label>
 
-            <ion-item>
-                <ion-label>whats</ion-label>
-                <ion-checkbox [(ngModel)]="whats" disabled="true"></ion-checkbox>
-            </ion-item>
+	</ion-item>
+	
+	<form>
+		<ion-input maxlength="1" type="number" [(ngModel)]="range" ngControl="rangeCtrl"></ion-input>		
+		<input class="range" type="range" name="lname" [(ngModel)]="range" (change)="onChange()" max=5>
+	
+	</form>
 
-            <ion-item>
-                <ion-label>up</ion-label>
-                <ion-checkbox [(ngModel)]="up"></ion-checkbox>
-            </ion-item>
+	<ion-item>
+		<ion-label floating>Username</ion-label>
+		<ion-input type="text"></ion-input>
+		<ion-input type="range"></ion-input>
+	</ion-item>
 
-        </ion-list>
-    </ion-card>
+	<ion-card>
+		<ion-list>
+			<ion-item>
+				<ion-label>hey</ion-label>
+				<ion-checkbox [(ngModel)]="hey"></ion-checkbox>
+			</ion-item>
+
+			<ion-item>
+				<ion-label>whats</ion-label>
+				<ion-checkbox [(ngModel)]="whats" disabled="true"></ion-checkbox>
+			</ion-item>
+
+			<ion-item>
+				<ion-label>up</ion-label>
+				<ion-checkbox [(ngModel)]="up"></ion-checkbox>
+			</ion-item>
+
+		</ion-list>
+	</ion-card>
 </ion-content>
 
-<button menuToggle>Toggle Menu</button>
+<button menuToggle>
+	<ion-icon name="home"></ion-icon>Toggle Menu</button>

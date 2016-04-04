@@ -1,15 +1,20 @@
 import {Page, NavController} from 'ionic-angular';  
 import {Http} from 'angular2/http';
+//import {Control} from 'angular2/core';
+import {Control, Validators, FORM_PROVIDERS, FORM_DIRECTIVES} from 'angular2/common';
 
 import {GitHubService} from '../../services/github';
 @Page({
 	templateUrl: 'build/pages/home/home.html',
-	providers: [GitHubService]
+	providers: [FORM_PROVIDERS, GitHubService],
+	directives: [FORM_DIRECTIVES]
 })
 export class HomePage {  
 	public foundRepos;
 	public username : string;
+	public range;
 	public Firebase;
+	public rangeCtrl = new Control('3', Validators.maxLength(1));
 
 	constructor(private github: GitHubService, private nav: NavController, private http: Http) {			  
 	  console.log("username:", this.username);
@@ -84,7 +89,7 @@ export class HomePage {
 			console.log("User is logged out");
 		}
 		}
-		// Register the callback to be fired every time auth state changes]
+		// Register the callback to be fi#red every time auth state changes]
 		ref.onAuth(authDataCallback);
 		
 		var authData = ref.getAuth();
@@ -121,5 +126,9 @@ export class HomePage {
 				}
 			);
 		
+	}
+	
+	onChange() {
+		console.log("Range Changed", this.range);
 	}
 }
