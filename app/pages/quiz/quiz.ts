@@ -1,14 +1,14 @@
-import {Page, NavController, NavParams} from 'ionic-angular';  
+import {Page, NavController, NavParams} from 'ionic-angular';
 
 @Page({
     templateUrl: 'build/pages/quiz/quiz.html',
     providers: []
 })
-export class QuizPage {  
+export class QuizPage {
     public readme = 'asdfasdfasdfasdsf';
 
-    constructor(private nav: NavController, 
-                private navParams: NavParams) {
+    constructor(private nav: NavController,
+        private navParams: NavParams) {
 
     }
     goBack() {

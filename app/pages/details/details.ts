@@ -1,17 +1,17 @@
-import {Page, NavController, NavParams} from 'ionic-angular';  
+import {Page, NavController, NavParams} from 'ionic-angular';
 import {GitHubService} from '../../services/github';
 
 @Page({
     templateUrl: 'build/pages/details/details.html',
     providers: [GitHubService]
 })
-export class DetailsPage {  
+export class DetailsPage {
     public readme = '';
     public repo;
 
-    constructor(private github: GitHubService, 
-                private nav: NavController, 
-                private navParams: NavParams) {
+    constructor(private github: GitHubService,
+        private nav: NavController,
+        private navParams: NavParams) {
 
         this.repo = navParams.get('repo');
 

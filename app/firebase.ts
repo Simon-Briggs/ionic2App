@@ -1,3 +1,3 @@
-export class _Firebase {
+/*export class _Firebase {
     
-}
+}*/

@@ -18,7 +18,7 @@ export class MyApp {
 	menu: any;
 	username : string;
 	
-	pages : Array = Constants.pages;
+	pages : Array<any> = Constants.pages;
 
 	constructor(menu: MenuController, platform: Platform, app: IonicApp) {
 		this.menu = menu;
