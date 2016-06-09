@@ -5,7 +5,7 @@ import {provide} from "angular2/core";
 import {StatusBar} from 'ionic-native';
 
 import {Constants} from './constants';
-
+import {MyFirebase} from './myfirebase';
 @App({
 	templateUrl: 'build/pages/sidebar/sidebar.html',
 	config: {}, // http://ionicframework.com/docs/v2/api/config/Config/
@@ -50,6 +50,17 @@ export class MyApp {
 
 	openPage(page) {
 		this.menu.close();
+		console.log("opening page", page);
+		if(page == "logout") {
+			console.log("Logging out, then going to login page");
+			
+			window.localStorage.removeItem('email');
+			window.localStorage.removeItem('password');
+			
+			var Firebase = require("firebase");
+			var ref = new Firebase("https://shining-torch-2724.firebaseio.com");
+			ref.unauth();
+		}
 		let nav = this.app.getComponent('nav');
 		console.log("switching tab");
 		nav.setRoot(page.component);

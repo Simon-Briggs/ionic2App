@@ -5,8 +5,10 @@ import {Constants} from '../../constants';
 	providers: []
 })
 export class LoginPage {
-	public email;
-	public password;
+	public email : string = "";
+	public password : string = "";
+	public isLoading : boolean = false; //Used to animate when we are attempting a login
+	public errorMessage : string = "";
 	public Firebase;
 
 	constructor(private nav: NavController) {
@@ -38,8 +40,10 @@ export class LoginPage {
 
 			if (error) {
 				console.log("Error creating user:", error);
+				_this.errorMessage = "Error creating user: " + error;
 			} else {
 				console.log("Successfully created user account with uid:", userData);
+				_this.errorMessage = "";
 			}
 		});
 	}
@@ -59,8 +63,13 @@ export class LoginPage {
 
 	login(): void {
 		if (!this.validateForm()) {
+			console.log("form invalid");
+			this.errorMessage = "Username or password invalid";			
 			return;
 		}
+		console.log("logging in...");
+		this.isLoading = true;
+		
 		this.Firebase = require('firebase');
 		var ref = new this.Firebase("https://shining-torch-2724.firebaseio.com");
 		let email = this.email, password = this.password;
@@ -73,18 +82,26 @@ export class LoginPage {
 				switch (error.code) {
 					case "INVALID_EMAIL":
 						console.log("The specified user account email is invalid.");
+						_this.errorMessage = "The specified user account email is invalid";
 						break;
 					case "INVALID_PASSWORD":
 						console.log("The specified user account password is incorrect.");
+						_this.errorMessage = "The specified user account password is incorrect";
 						break;
 					case "INVALID_USER":
 						console.log("The specified user account does not exist.");
+						_this.errorMessage = "The specified user account does not exist";
 						break;
 					default:
 						console.log("Error logging user in:", error);
+						_this.errorMessage = "Error logging in: " + error;
 				}
 			} else {
 				console.log("Authenticated successfully with payload:", authData);
+				_this.errorMessage = "";
+				
+				//TODO: Toasts here.
+				
 				window.localStorage.setItem('email', email);
 				window.localStorage.setItem('password', password);
 
