@@ -9,6 +9,7 @@ export class LoginPage {
 	public password : string = "";
 	public isLoading : boolean = false; //Used to animate when we are attempting a login
 	public errorMessage : string = "";
+	public successMessage : string = "";
 	public Firebase;
 
 	constructor(private nav: NavController) {
@@ -27,7 +28,9 @@ export class LoginPage {
 	}
 
 	signup(): void {
+		this.errorMessage = "";
 		if (!this.validateForm()) {
+			this.errorMessage = "Username or password invalid";
 			return;
 		}
 		this.Firebase = require('firebase');
@@ -44,6 +47,7 @@ export class LoginPage {
 			} else {
 				console.log("Successfully created user account with uid:", userData);
 				_this.errorMessage = "";
+				_this.successMessage = "Account created!!";
 			}
 		});
 	}
@@ -125,8 +129,9 @@ export class LoginPage {
 		var ref = new this.Firebase("https://shining-torch-2724.firebaseio.com");
 		ref.unauth();
 
-		this.nav.setRoot(Constants.pages[Constants.LoginPage].component);
+		//this.nav.setRoot(Constants.pages[Constants.LoginPage].component);
 		this.nav.popToRoot();
 		console.log("Logged out");
+		this.successMessage = "Logged out";
 	}
 }

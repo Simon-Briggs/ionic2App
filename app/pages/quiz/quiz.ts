@@ -17,7 +17,7 @@ export class QuizPage {
         "Q3: Rate c",
         "Q4: Rate d",
     ]
-    public answers;
+    public answers = [];
 
     constructor(private nav: NavController,
         private navParams: NavParams) {

@@ -1,11 +1,10 @@
-<ion-navbar *navbar>
+<ion-toolbar>
   <button menuToggle>
         <ion-icon name="menu"></ion-icon>
     </button>
-  <ion-title>
-    Quiz
-  </ion-title>
-</ion-navbar>
+  <ion-title>Quiz</ion-title>
+</ion-toolbar>
+
 
 <ion-content>
   <div padding [innerHTML]="readme"></div>
@@ -13,8 +12,7 @@
   <ion-list>
     <ion-item>
       <ion-icon name="leaf" item-left></ion-icon>
-      Herbology
-      <ion-icon name="rose" item-right></ion-icon>
+      < - I love herbs <ion-icon name="rose" item-right></ion-icon>
     </ion-item>
   </ion-list>
 
@@ -48,12 +46,15 @@
   </ion-item>
 
   <ion-card *ngFor="#question of questions">
-    <ion-label padding>{{question}}</ion-label>
+    <ion-item>
+      <ion-label padding>{{question}}</ion-label>
+      <ion-badge item-right>{{answers[question]}}</ion-badge>
+    </ion-item>
     <input class="range" type="range" name="lname" [(ngModel)]="answers[question]" (change)="onChange()" max=5>
   </ion-card>
 
-  <input [(ngModel)]="toppings[0]">
+  <input [(ngModel)]="answers[0]">
 
-  <button type="submit" (submit)="submitForm()">Submit!</button>
+  <ion-button type="submit" (submit)="submitForm()">Submit!</ion-button>
 
 </ion-content>
