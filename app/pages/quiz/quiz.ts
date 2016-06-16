@@ -1,7 +1,8 @@
-import {Page, NavController, NavParams} from 'ionic-angular';
+import {NavController, NavParams} from 'ionic-angular';
+import {Component} from '@angular/core';
 import {Constants} from '../../constants';
 
-@Page({
+@Component({
     templateUrl: 'build/pages/quiz/quiz.html',
     providers: []
 })

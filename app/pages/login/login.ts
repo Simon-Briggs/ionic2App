@@ -1,15 +1,17 @@
-import {Page, NavController} from 'ionic-angular';
+import {Page, Loading, NavController} from 'ionic-angular';
+import {Component} from '@angular/core';
 import {Constants} from '../../constants';
-@Page({
+
+@Component({
 	templateUrl: 'build/pages/login/login.html',
 	providers: []
 })
 export class LoginPage {
-	public email : string = "";
-	public password : string = "";
-	public isLoading : boolean = false; //Used to animate when we are attempting a login
-	public errorMessage : string = "";
-	public successMessage : string = "";
+	public email: string = "";
+	public password: string = "";
+	public isLoading: boolean = false; //Used to animate when we are attempting a login
+	public errorMessage: string = "";
+	public successMessage: string = "";
 	public Firebase;
 
 	constructor(private nav: NavController) {
@@ -17,6 +19,9 @@ export class LoginPage {
 	}
 
 	validateForm(): boolean {
+		let loading = Loading.create({
+			content: 'Please wait...'
+		});
 		if (this.email.length < 1 || this.email.indexOf("@") < 0) {
 			return false;
 		}
@@ -68,12 +73,12 @@ export class LoginPage {
 	login(): void {
 		if (!this.validateForm()) {
 			console.log("form invalid");
-			this.errorMessage = "Username or password invalid";			
+			this.errorMessage = "Username or password invalid";
 			return;
 		}
 		console.log("logging in...");
 		this.isLoading = true;
-		
+
 		this.Firebase = require('firebase');
 		var ref = new this.Firebase("https://shining-torch-2724.firebaseio.com");
 		let email = this.email, password = this.password;
@@ -103,9 +108,9 @@ export class LoginPage {
 			} else {
 				console.log("Authenticated successfully with payload:", authData);
 				_this.errorMessage = "";
-				
+
 				//TODO: Toasts here.
-				
+
 				window.localStorage.setItem('email', email);
 				window.localStorage.setItem('password', password);
 

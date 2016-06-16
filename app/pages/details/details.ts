@@ -1,7 +1,8 @@
-import {Page, NavController, NavParams} from 'ionic-angular';
+import {NavController, NavParams} from 'ionic-angular';
 import {GitHubService} from '../../services/github';
+import {Component} from '@angular/core';
 
-@Page({
+@Component({
     templateUrl: 'build/pages/details/details.html',
     providers: [GitHubService]
 })

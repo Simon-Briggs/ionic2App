@@ -1,10 +1,10 @@
-import {Page, NavController} from 'ionic-angular';
-import {Http} from 'angular2/http';
-//import {Control} from 'angular2/core';
-import {Control, Validators, FORM_PROVIDERS, FORM_DIRECTIVES} from 'angular2/common';
+import {NavController} from 'ionic-angular';
+import {Http} from '@angular/http';
+import {Component} from '@angular/core';
+import {Control, Validators, FORM_PROVIDERS, FORM_DIRECTIVES} from '@angular/common';
 
 import {GitHubService} from '../../services/github';
-@Page({
+@Component({
 	templateUrl: 'build/pages/home/home.html',
 	providers: [FORM_PROVIDERS, GitHubService],
 	directives: [FORM_DIRECTIVES]
