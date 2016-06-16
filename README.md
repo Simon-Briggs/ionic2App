@@ -1,5 +1,7 @@
 # ionic2App
 
+My playground for testing out the new features of Ionic 2
+
 - Firebase for authenitcation and database
 - Ionic 2 uses custom material design elements for styling
 

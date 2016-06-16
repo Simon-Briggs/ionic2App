@@ -60,7 +60,7 @@ export class MyApp {
 			var ref = new Firebase("https://shining-torch-2724.firebaseio.com");
 			ref.unauth();
 		}
-		let nav = this.app.getComponent('nav');
+		let nav = this.app.getRootNav();
 		console.log("switching tab");
 		nav.setRoot(page.component);
 	}
