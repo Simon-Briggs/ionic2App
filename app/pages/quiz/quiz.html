@@ -45,7 +45,7 @@
     <input class="range" type="range" name="lname" [(ngModel)]="range" (change)="onChange()" max=5>
   </ion-item>
 
-  <ion-card *ngFor="#question of questions">
+  <ion-card *ngFor="let question of questions">
     <ion-item>
       <ion-label padding>{{question}}</ion-label>
       <ion-badge item-right>{{answers[question]}}</ion-badge>
