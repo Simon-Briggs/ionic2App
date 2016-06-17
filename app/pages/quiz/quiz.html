@@ -45,16 +45,14 @@
     <input class="range" type="range" name="lname" [(ngModel)]="range" (change)="onChange()" max=5>
   </ion-item>
 
-  <ion-card *ngFor="let question of questions">
+  <ion-card *ngFor="let question of questionCount">
     <ion-item>
-      <ion-label padding>{{question}}</ion-label>
+      <ion-label padding>{{questions[question]}}</ion-label>
       <ion-badge item-right>{{answers[question]}}</ion-badge>
     </ion-item>
     <input class="range" type="range" name="lname" [(ngModel)]="answers[question]" (change)="onChange()" max=5>
   </ion-card>
 
-  <input [(ngModel)]="answers[0]">
-
-  <ion-button type="submit" (submit)="submitForm()">Submit!</ion-button>
+  <button type="submit" (click)="submitForm()">Submit!</button>
 
 </ion-content>
