@@ -19,9 +19,6 @@ export class LoginPage {
 	}
 
 	validateForm(): boolean {
-		let loading = Loading.create({
-			content: 'Please wait...'
-		});
 		if (this.email.length < 1 || this.email.indexOf("@") < 0) {
 			return false;
 		}
@@ -38,6 +35,11 @@ export class LoginPage {
 			this.errorMessage = "Username or password invalid";
 			return;
 		}
+		
+		let loading = Loading.create({
+			content: 'Please wait...'
+		});
+		this.nav.present(loading);
 		this.Firebase = require('firebase');
 		var ref = new this.Firebase("https://shining-torch-2724.firebaseio.com");
 		var _this = this;
@@ -45,7 +47,7 @@ export class LoginPage {
 			email: this.email,
 			password: this.password
 		}, function (error, userData) {
-
+			loading.dismiss();
 			if (error) {
 				console.log("Error creating user:", error);
 				_this.errorMessage = "Error creating user: " + error;
@@ -76,6 +78,10 @@ export class LoginPage {
 			this.errorMessage = "Username or password invalid";
 			return;
 		}
+		
+		let loading = Loading.create({
+			content: 'Please wait...'
+		});
 		console.log("logging in...");
 		this.isLoading = true;
 
@@ -86,7 +92,8 @@ export class LoginPage {
 		ref.authWithPassword({
 			email: email,
 			password: password
-		}, function (error, authData) {
+		}, function (error, authData) {			
+			loading.dismiss();
 			if (error) {
 				switch (error.code) {
 					case "INVALID_EMAIL":
