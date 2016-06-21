@@ -35,9 +35,9 @@ export class LoginPage {
 			this.errorMessage = "Username or password invalid";
 			return;
 		}
-		
+
 		let loading = Loading.create({
-			content: 'Please wait...'
+			content: 'Signing up...'
 		});
 		this.nav.present(loading);
 		this.Firebase = require('firebase');
@@ -78,10 +78,12 @@ export class LoginPage {
 			this.errorMessage = "Username or password invalid";
 			return;
 		}
-		
+
 		let loading = Loading.create({
-			content: 'Please wait...'
+			content: 'Logging in...'
 		});
+		this.nav.present(loading);
+
 		console.log("logging in...");
 		this.isLoading = true;
 
@@ -92,7 +94,7 @@ export class LoginPage {
 		ref.authWithPassword({
 			email: email,
 			password: password
-		}, function (error, authData) {			
+		}, function (error, authData) {
 			loading.dismiss();
 			if (error) {
 				switch (error.code) {

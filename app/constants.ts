@@ -8,7 +8,7 @@ export class Constants {
 	public static pages = [
 		{ title: "Login Page", component: LoginPage },
 		{ title: "Home Page", component: HomePage },
-		{ title: "Details Page", component: DetailsPage },
+		{ title: "No back button", component: DetailsPage },
 		{ title: "Quiz Page", component: QuizPage },
 		{ title: "Logout", component: LoginPage }
 	]

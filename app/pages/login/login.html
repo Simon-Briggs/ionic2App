@@ -22,8 +22,8 @@
         <button block default (click)="login()">Login</button>
         <button block secondary (click)="signup()">Sign Up</button>
         <button block danger (click)="logout()">Logout</button>
-        <ion-label danger>{{errorMessage}}</ion-label>
-        <ion-label secondary>{{successMessage}}</ion-label>
+        <div padding style="color:red">{{errorMessage}}</div>
+        <div padding style="color:green">{{successMessage}}</div>
     </div>
 </ion-content>
 
