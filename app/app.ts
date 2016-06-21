@@ -1,4 +1,4 @@
-import {ionicBootstrap, App, Platform, MenuController, NavController} from 'ionic-angular';
+import {ionicBootstrap, App, Platform, MenuController, NavController, Toast} from 'ionic-angular';
 import {TRANSLATE_PROVIDERS, TranslateService, TranslateLoader, TranslateStaticLoader, TranslatePipe, MissingTranslationHandler} from 'ng2-translate/ng2-translate';
 import {provide, Component} from "@angular/core";
 
@@ -15,9 +15,9 @@ export class MyApp {
 	rootPage: any = Constants.pages[Constants.HomePage].component;
 	app: App;
 	menu: MenuController;
-	username : string;
+	username: string;
 
-	pages : Array<any> = Constants.pages;
+	pages: Array<any> = Constants.pages;
 
 	constructor(menu: MenuController, platform: Platform, app: App) {
 		this.menu = menu;
@@ -28,41 +28,59 @@ export class MyApp {
 		//userLang = /(de|en|hr)/gi.test(userLang) ? userLang : 'en';
 		//translate.setDefaultLang('en');
 		//translate.use(userLang);
-		
+
 
 
 		platform.ready().then(() => {
 			// Okay, so the platform is ready and our plugins are available.
 			// Here you can do any higher level native things you might need.
 			StatusBar.styleDefault();
-
-			// Check if we've logged in before
-			this.username = window.localStorage.getItem('email');
-			if (this.username == null) {
-				console.log("Not logged in");
-				this.openPage(Constants.pages[0]);
-			} else {
-				console.log("Already logged in as " + this.username);
-			}
+			this.checkLogin();
 		});
+	}
+
+
+	checkLogin() {
+		// Check if we've logged in before
+		this.username = window.localStorage.getItem('email');
+		if (this.username == null) {
+			console.log("Not logged in");
+			this.openPage(Constants.pages[Constants.LoginPage]);
+			return false;
+		} else {
+			console.log("Already logged in as " + this.username);
+			return true;
+		}
 	}
 
 	openPage(page) {
 		this.menu.close();
 		console.log("opening page", page);
-		if(page == "logout") {
+		let nav = this.app.getRootNav();
+
+		if (page.component == Constants.pages[Constants.LoginPage].component) {
+			//if (page.title == "Logout") {
 			console.log("Logging out, then going to login page");
-			
+
 			window.localStorage.removeItem('email');
 			window.localStorage.removeItem('password');
-			
+
 			var Firebase = require("firebase");
 			var ref = new Firebase("https://shining-torch-2724.firebaseio.com");
 			ref.unauth();
+
+			let toast = Toast.create({
+				message: 'Please login again',
+				duration: 3000
+			});
+			nav.present(toast);
+			nav.setRoot(page.component);
+
+		} else {
+			if (this.checkLogin()) {
+				nav.setRoot(page.component);
+			}
 		}
-		let nav = this.app.getRootNav();
-		console.log("switching tab");
-		nav.setRoot(page.component);
 	}
 
 }
@@ -73,7 +91,7 @@ export class MyApp {
 // Set any config for your app as the third argument:
 // http://ionicframework.com/docs/v2/api/config/Config/
 ionicBootstrap(MyApp, [provide(MissingTranslationHandler, { useClass: MyMissingTranslationHandler })], {
-  
+
 });
 
 
