@@ -6,6 +6,15 @@
 </ion-toolbar>
 
 <ion-content class="home">
+
+	<base-chart class="chart"
+				[datasets]="lineChartData"
+				[labels]="lineChartLabels"
+				[options]="lineChartOptions"
+				[colors]="lineChartColours"
+				[legend]="lineChartLegend"
+				[chartType]="lineChartType"></base-chart>
+
 	<ion-list inset>
 		<ion-item>
 			<ion-label>Username</ion-label>
