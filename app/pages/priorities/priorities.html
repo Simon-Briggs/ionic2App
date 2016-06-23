@@ -1,0 +1,16 @@
+<ion-toolbar>
+	<button menuToggle>
+        <ion-icon name="menu"></ion-icon>
+    </button>
+	<ion-title>Priorities</ion-title>
+</ion-toolbar>
+
+
+<div>
+	<div class='dragula--container' [dragulaModel]='items' [dragula]='"mainBag"'>
+		<ion-card class="dragula--item" *ngFor="let item of items">
+			<ion-label>{{item.text}}
+			</ion-label>
+		</ion-card>
+	</div>
+</div>
