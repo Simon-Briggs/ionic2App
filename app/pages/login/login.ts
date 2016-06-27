@@ -51,7 +51,7 @@ export class LoginPage {
 			_this.successMessage = "Account created!!";
 
 			var db = MyFirebase.database;
-			db.ref("users/" + userData.uid).set({
+			db.ref("userCreation/" + userData.uid).set({
 				accountCreated: MyFirebase.now
 			}).then(function (success) {
 				console.log("success", success);
@@ -117,7 +117,7 @@ export class LoginPage {
 				serverLastLogin: MyFirebase.now
 			}).then(function (success) {
 				console.log("success", success, MyFirebase.now);
-				_this.getRef("users/" + authData.uid + "/accountCreated");
+				_this.getRef("userCreation/" + authData.uid + "/accountCreated", "accountCreated");
 
 				_this.nav.setRoot(Constants.pages[Constants.HomePage].component);
 				_this.nav.popToRoot();
@@ -151,20 +151,32 @@ export class LoginPage {
 	}
 
 
-	getRef(ref) {
-		this.http.get(MyFirebase.config.databaseURL + "/" + ref)
-			.map(res => res.text())
-			.subscribe(
-			data => {
-				console.log(data);
-			},
-			err => {
-				console.log(err);
-			},
-			() => {
-				console.log("firebase connection complete");
-			}
-			);
+	getRef(ref, saveAs) {
+
+
+		var db = MyFirebase.database.ref(ref);
+		// Attach an asynchronous callback to read the data at our posts reference
+		db.once("value", function (snapshot) {
+			console.log("ref",saveAs,snapshot.val());
+			window.localStorage.setItem(saveAs, snapshot.val());
+		}, function (errorObject) {
+			console.log("The read failed: " + errorObject);
+		});
+
+		/*		this.http.get(MyFirebase.config.databaseURL + "/" + ref)
+					.map(res => res.text())
+					.subscribe(
+					data => {
+						console.log(data);
+					},
+					err => {
+						console.log(err);
+					},
+					() => {
+						console.log("firebase connection complete");
+					}
+					);
+					*/
 	}
 
 }

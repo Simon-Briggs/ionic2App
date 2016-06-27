@@ -1,7 +1,7 @@
 import {NavController} from 'ionic-angular';
 import {Http} from '@angular/http';
 import {Component} from '@angular/core';
-import {Control, Validators, FORM_PROVIDERS, FORM_DIRECTIVES, NgClass, CORE_DIRECTIVES} from '@angular/common';
+import {Control, Validators, NgClass, CORE_DIRECTIVES} from '@angular/common';
 import '../../../node_modules/chart.js/dist/Chart.bundle.min.js';
 import {CHART_DIRECTIVES} from 'ng2-charts/ng2-charts';
 import {MyFirebase} from '../../myFirebase';
@@ -11,26 +11,31 @@ import {MyFirebase} from '../../myFirebase';
 import {GitHubService} from '../../services/github';
 @Component({
 	templateUrl: 'build/pages/home/home.html',
-	providers: [FORM_PROVIDERS, GitHubService],
-	directives: [FORM_DIRECTIVES, CHART_DIRECTIVES, NgClass, CORE_DIRECTIVES]
+	providers: [GitHubService],
+	directives: [CHART_DIRECTIVES, NgClass, CORE_DIRECTIVES]
 })
 export class HomePage {
 	public lessons = [{
 		title: "lesson 1",
 		description: "no",
-		showIn : 0
+		showIn : 0,
+		date: null,
+		showDate : ""
 	},{
 		title: "lesson 2",
 		description: "yes",
-		showIn : 24 * 60 * 60 *1000
+		showIn : 24 * 60 * 60 *1000,
+		showDate : ""
 	},{
 		title: "lesson 3",
 		description: "hi",
-		showIn : 2 * 24 * 60 * 60 *1000
+		showIn : 2 * 24 * 60 * 60 *1000,
+		showDate : ""
 	},{
 		title: "lesson 4",
 		description: "learn stuff",
-		showIn : 3 * 24 * 60 * 60 *1000
+		showIn : 3 * 24 * 60 * 60 *1000,
+		showDate : ""
 	}];
 	public username: string;
 	public range: number;
@@ -86,7 +91,17 @@ export class HomePage {
 
 	constructor(private github: GitHubService, private nav: NavController, private http: Http) {
 		console.log("username:", this.username);
-		this.getData();
+	
+		let date;
+		for(var i in this.lessons) {
+			let lesson = this.lessons[i];
+			console.log(Date.now(), window.localStorage.getItem("accountCreated"), lesson.showIn);
+			lesson.showIn = lesson.showIn + parseInt(window.localStorage.getItem("accountCreated")) - Date.now();
+			date = new Date(lesson.showIn);
+			lesson.showDate = date.getUTCDate() + "day(s) and " + date.getUTCHours() + ":" + date.getUTCMinutes() + ":" + date.getUTCSeconds();
+		}
+		console.log(this.lessons);
+
 	}
 
 	getRepos() {
