@@ -4,6 +4,7 @@ import {Component} from '@angular/core';
 import {Control, Validators, FORM_PROVIDERS, FORM_DIRECTIVES, NgClass, CORE_DIRECTIVES} from '@angular/common';
 import '../../../node_modules/chart.js/dist/Chart.bundle.min.js';
 import {CHART_DIRECTIVES} from 'ng2-charts/ng2-charts';
+import {MyFirebase} from '../../myFirebase';
 //var Chart = require('chart.js/src/chart');
 
 
@@ -87,16 +88,7 @@ export class HomePage {
 	}
 
 	getData() {
-		this.Firebase = require('firebase');
-		var ref = new this.Firebase("https://shining-torch-2724.firebaseio.com/web/data");
-
-		// Attach an asynchronous callback to read the data at our posts reference
-		ref.on("value", function (snapshot) {
-			console.log(snapshot.val());
-		}, function (errorObject) {
-			console.log("The read failed: " + errorObject.code);
-		});
-
+		var ref = MyFirebase.database.ref("/");;
 		// Attach an asynchronous callback to read the data at our posts reference
 		ref.once("value", function (snapshot) {
 			console.log(snapshot.val());
@@ -104,62 +96,25 @@ export class HomePage {
 			console.log("The read failed: " + errorObject.code);
 		});
 
-		// Retrieve new posts as they are added to our database
-		ref.on("child_added", function (snapshot, prevChildKey) {
-			var newPost = snapshot.val();
-			console.log("Snapshot.val: ", newPost);
-		});
-
-		var child = ref.child("test");
-		child.set({
-			test: "this is a set test"
-		});
-		child.update({
-			test: "this is an update test"
-		}, function (error) {
-			if (error) {
-				console.log("error", error);
-			} else {
-				console.log("success setting db");
-			}
-		});
-		var key = child.push({
-			unique: "Wrapped by a unique key"
-		}).key();
-		console.log("unique key ", key);
-		var transRef = ref.child("transaction");
-		transRef.transaction(function (current_value) {
-			return (current_value || 0) + 1;
-		});
-
 		// Create a callback which logs the current auth state
-		function authDataCallback(authData) {
-			if (authData) {
-				console.log("User " + authData.uid + " is logged in with " + authData.provider);
+		function authDataCallback(user) {
+			if (user) {
+				// User signed in!
+				var uid = user.uid;
 			} else {
-				console.log("User is logged out");
+				// User logged out
 			}
 		}
-		// Register the callback to be fi#red every time auth state changes]
-		ref.onAuth(authDataCallback);
+		// Register the callback to be fired every time auth state changes]
+		var auth = MyFirebase.auth;
+		auth.onAuthStateChanged(authDataCallback);
 
-		var authData = ref.getAuth();
+		var authData = auth.currentUser;
 		if (authData) {
-			console.log("User " + authData.uid + " is logged in with " + authData.provider);
+			console.log("User is logged in", authData);
 		} else {
 			console.log("User is logged out");
 		}
-
-		var presenceRef = new this.Firebase('shining-torch-2724.firebaseio.com/disconnectmessage');
-		// Write a string when this client loses connection
-		presenceRef.onDisconnect().set("I disconnected!");
-
-		// Remove our disconnect sensor when we close the app gracefully
-		presenceRef.onDisconnect().remove(function (err) {
-			if (err) {
-				console.error('could not establish onDisconnect event', err);
-			}
-		});
 	}
 
 	getFirebaseSaveFile() {

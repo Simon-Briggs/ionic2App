@@ -1,6 +1,7 @@
 import {Page, Loading, NavController} from 'ionic-angular';
 import {Component} from '@angular/core';
 import {Constants} from '../../constants';
+import {MyFirebase} from '../../myFirebase';
 
 @Component({
 	templateUrl: 'build/pages/login/login.html',
@@ -15,7 +16,6 @@ export class LoginPage {
 	public Firebase;
 
 	constructor(private nav: NavController) {
-		this.Firebase = require('firebase');
 	}
 
 	validateForm(): boolean {
@@ -40,13 +40,9 @@ export class LoginPage {
 			content: 'Signing up...'
 		});
 		this.nav.present(loading);
-		this.Firebase = require('firebase');
-		var ref = new this.Firebase("https://shining-torch-2724.firebaseio.com");
+		var ref = MyFirebase.auth;
 		var _this = this;
-		ref.createUser({
-			email: this.email,
-			password: this.password
-		}, function (error, userData) {
+		ref.createUserWithEmailAndPassword(this.email, this.password).then(function (error, userData) {
 			loading.dismiss();
 			if (error) {
 				console.log("Error creating user:", error);
@@ -87,52 +83,36 @@ export class LoginPage {
 		console.log("logging in...");
 		this.isLoading = true;
 
-		this.Firebase = require('firebase');
-		var ref = new this.Firebase("https://shining-torch-2724.firebaseio.com");
+		var ref = MyFirebase.auth;
 		let email = this.email, password = this.password;
 		var _this = this;
-		ref.authWithPassword({
-			email: email,
-			password: password
-		}, function (error, authData) {
+
+		ref.signInWithEmailAndPassword(email, password).then(function (authData) {
 			loading.dismiss();
-			if (error) {
-				switch (error.code) {
-					case "INVALID_EMAIL":
-						console.log("The specified user account email is invalid.");
-						_this.errorMessage = "The specified user account email is invalid";
-						break;
-					case "INVALID_PASSWORD":
-						console.log("The specified user account password is incorrect.");
-						_this.errorMessage = "The specified user account password is incorrect";
-						break;
-					case "INVALID_USER":
-						console.log("The specified user account does not exist.");
-						_this.errorMessage = "The specified user account does not exist";
-						break;
-					default:
-						console.log("Error logging user in:", error);
-						_this.errorMessage = "Error logging in: " + error;
-				}
-			} else {
-				console.log("Authenticated successfully with payload:", authData);
-				_this.errorMessage = "";
+			console.log("Authenticated successfully with payload:", authData);
+			_this.errorMessage = "";
 
-				//TODO: Toasts here.
+			//TODO: Toasts here.
 
-				window.localStorage.setItem('email', email);
-				window.localStorage.setItem('password', password);
+			window.localStorage.setItem('email', email);
+			window.localStorage.setItem('password', password);
 
-				// save the user's profile into the database so we can list users,
-				// use them in Security and Firebase Rules, and show profiles
-				ref.child("users").child(authData.uid).set({
-					provider: authData.provider,
-					name: _this.getName(authData)
-				});
+			// save the user's profile into the database so we can list users,
+			// use them in Security and Firebase Rules, and show profiles
+			var db = MyFirebase.database;
+			db.ref("users/").set(authData.uid);
 
-				_this.nav.setRoot(Constants.pages[Constants.HomePage].component);
-				_this.nav.popToRoot();
-			}
+			db.ref("users/" + authData.uid).set({
+				provider: authData.provider,
+				name: _this.getName(authData)
+			});
+
+			_this.nav.setRoot(Constants.pages[Constants.HomePage].component);
+			_this.nav.popToRoot();
+		}, function (error) {
+			console.log("caught excetion", error);
+			loading.dismiss();
+			_this.errorMessage = error.message;
 		});
 	}
 
@@ -140,8 +120,12 @@ export class LoginPage {
 		window.localStorage.removeItem('email');
 		window.localStorage.removeItem('password');
 
-		var ref = new this.Firebase("https://shining-torch-2724.firebaseio.com");
-		ref.unauth();
+		var ref = MyFirebase.auth;
+		ref.signOut().then(function () {
+			console.log("Signed out");
+		}, function (error) {
+			console.log("error signing out");
+		});
 
 		//this.nav.setRoot(Constants.pages[Constants.LoginPage].component);
 		this.nav.popToRoot();

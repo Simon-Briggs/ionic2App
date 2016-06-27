@@ -5,7 +5,7 @@ import {provide, Component} from "@angular/core";
 import {StatusBar} from 'ionic-native';
 
 import {Constants} from './constants';
-import {MyFirebase} from './myfirebase';
+import {MyFirebase} from './myFirebase';
 
 @Component({
 	templateUrl: 'build/pages/sidebar/sidebar.html',
@@ -65,9 +65,8 @@ export class MyApp {
 			window.localStorage.removeItem('email');
 			window.localStorage.removeItem('password');
 
-			var Firebase = require("firebase");
-			var ref = new Firebase("https://shining-torch-2724.firebaseio.com");
-			ref.unauth();
+			var ref = MyFirebase.auth;
+			ref.signOut();
 
 			let toast = Toast.create({
 				message: 'Please login again',

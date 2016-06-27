@@ -1,6 +1,7 @@
 import {NavController, NavParams} from 'ionic-angular';
 import {Component} from '@angular/core';
 import {Constants} from '../../constants';
+import {MyFirebase} from '../../myFirebase';
 
 @Component({
     templateUrl: 'build/pages/quiz/quiz.html',
@@ -35,10 +36,7 @@ export class QuizPage {
         }
         //submit results to firebase, then go back to homepage
 
-
-        this.Firebase = require('firebase');
-        var ref = new this.Firebase("https://shining-torch-2724.firebaseio.com/web/data");
-
+        var ref = MyFirebase.database.ref("/users/");;
 
         var child = ref.child("ref");
         var key = Date.now();

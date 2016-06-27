@@ -7,8 +7,8 @@
 
 
 <div>
-	<div class='dragula--container' [dragulaModel]='items' [dragula]='"mainBag"'>
-		<ion-card class="dragula--item" *ngFor="let item of items">
+	<div class='dragula--container' [dragulaModel]='priorities' [dragula]='"mainBag"'>
+		<ion-card class="dragula--item" *ngFor="let item of priorities">
 			<ion-label>{{item.text}}
 			</ion-label>
 		</ion-card>

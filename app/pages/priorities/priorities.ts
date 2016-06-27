@@ -8,7 +8,7 @@ import {Dragula, DragulaService} from 'ng2-dragula/ng2-dragula';
 	viewProviders: [DragulaService]
 })
 export class PrioritiesPage {
-	public items: any = [
+	public priorities: any = [
 		{
 			text: "priority 1"
 		}, {
@@ -37,7 +37,7 @@ export class PrioritiesPage {
 		});
 		dragulaService.out.subscribe((value) => {
 			console.log(`out: ${value[0]}`);
-			console.log(items);
+			console.log(this.priorities);
 		//	this.onOut(value.slice(1));
 		});
 	}
