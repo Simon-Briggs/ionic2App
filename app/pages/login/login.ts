@@ -42,16 +42,25 @@ export class LoginPage {
 		this.nav.present(loading);
 		var ref = MyFirebase.auth;
 		var _this = this;
-		ref.createUserWithEmailAndPassword(this.email, this.password).then(function (error, userData) {
+		ref.createUserWithEmailAndPassword(this.email, this.password).then(function (userData) {
+
 			loading.dismiss();
-			if (error) {
-				console.log("Error creating user:", error);
-				_this.errorMessage = "Error creating user: " + error;
-			} else {
-				console.log("Successfully created user account with uid:", userData);
-				_this.errorMessage = "";
-				_this.successMessage = "Account created!!";
-			}
+			console.log("Successfully created user account with uid:", userData);
+			_this.errorMessage = "";
+			_this.successMessage = "Account created!!";
+
+			var db = MyFirebase.database;
+			db.ref("users/" + userData.uid).set({
+				accountCreated: Date.now()
+			}).then(function(success){
+				console.log("success", success);
+			}, function(fail) {
+				console.log("fail", fail);
+			});
+		}, function (error) {
+			loading.dismiss();
+			console.log("Error creating user:", error);
+			_this.errorMessage = "Error creating user: " + error;
 		});
 	}
 
@@ -100,11 +109,15 @@ export class LoginPage {
 			// save the user's profile into the database so we can list users,
 			// use them in Security and Firebase Rules, and show profiles
 			var db = MyFirebase.database;
-			db.ref("users/").set(authData.uid);
+			//db.ref("users/").once(authData.uid);
 
 			db.ref("users/" + authData.uid).set({
-				provider: authData.provider,
-				name: _this.getName(authData)
+				lastLogin: Date.now(),
+				serverLastLogin: MyFirebase._firebase.database.ServerValue.TIMESTAMP
+			}).then(function(success){
+				console.log("success", success);
+			}, function(fail) {
+				console.log("fail", fail);
 			});
 
 			_this.nav.setRoot(Constants.pages[Constants.HomePage].component);

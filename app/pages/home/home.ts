@@ -88,7 +88,7 @@ export class HomePage {
 	}
 
 	getData() {
-		var ref = MyFirebase.database.ref("/");;
+		var ref = MyFirebase.database.ref("/");
 		// Attach an asynchronous callback to read the data at our posts reference
 		ref.once("value", function (snapshot) {
 			console.log(snapshot.val());
