@@ -2,6 +2,7 @@ import {Page, Loading, NavController} from 'ionic-angular';
 import {Component} from '@angular/core';
 import {Constants} from '../../constants';
 import {MyFirebase} from '../../myFirebase';
+import {Http} from '@angular/http';
 
 @Component({
 	templateUrl: 'build/pages/login/login.html',
@@ -15,7 +16,7 @@ export class LoginPage {
 	public successMessage: string = "";
 	public Firebase;
 
-	constructor(private nav: NavController) {
+	constructor(private nav: NavController, private http: Http) {
 	}
 
 	validateForm(): boolean {
@@ -51,10 +52,10 @@ export class LoginPage {
 
 			var db = MyFirebase.database;
 			db.ref("users/" + userData.uid).set({
-				accountCreated: Date.now()
-			}).then(function(success){
+				accountCreated: MyFirebase.now
+			}).then(function (success) {
 				console.log("success", success);
-			}, function(fail) {
+			}, function (fail) {
 				console.log("fail", fail);
 			});
 		}, function (error) {
@@ -105,27 +106,30 @@ export class LoginPage {
 
 			window.localStorage.setItem('email', email);
 			window.localStorage.setItem('password', password);
+			window.localStorage.setItem('uid', authData.uid);
 
 			// save the user's profile into the database so we can list users,
 			// use them in Security and Firebase Rules, and show profiles
 			var db = MyFirebase.database;
 			//db.ref("users/").once(authData.uid);
-
 			db.ref("users/" + authData.uid).set({
 				lastLogin: Date.now(),
-				serverLastLogin: MyFirebase._firebase.database.ServerValue.TIMESTAMP
-			}).then(function(success){
-				console.log("success", success);
-			}, function(fail) {
-				console.log("fail", fail);
-			});
+				serverLastLogin: MyFirebase.now
+			}).then(function (success) {
+				console.log("success", success, MyFirebase.now);
+				_this.getRef("users/" + authData.uid + "/accountCreated");
 
-			_this.nav.setRoot(Constants.pages[Constants.HomePage].component);
-			_this.nav.popToRoot();
+				_this.nav.setRoot(Constants.pages[Constants.HomePage].component);
+				_this.nav.popToRoot();
+			}, function (error) {
+				console.log("caught exception", error);
+				loading.dismiss();
+				_this.errorMessage = error.message;
+			});
 		}, function (error) {
-			console.log("caught excetion", error);
 			loading.dismiss();
 			_this.errorMessage = error.message;
+
 		});
 	}
 
@@ -145,4 +149,22 @@ export class LoginPage {
 		console.log("Logged out");
 		this.successMessage = "Logged out";
 	}
+
+
+	getRef(ref) {
+		this.http.get(MyFirebase.config.databaseURL + "/" + ref)
+			.map(res => res.text())
+			.subscribe(
+			data => {
+				console.log(data);
+			},
+			err => {
+				console.log(err);
+			},
+			() => {
+				console.log("firebase connection complete");
+			}
+			);
+	}
+
 }

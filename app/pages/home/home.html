@@ -27,12 +27,13 @@
 
 
 
-	<ion-card *ngFor="let repo of foundRepos" (click)="goToDetails(repo)">
+	<ion-card *ngFor="let lesson of lessons" (click)="goToLesson(lesson)">
 		<ion-card-header>
-			{{ repo.name }}
+			{{ lesson.title }}
 		</ion-card-header>
 		<ion-card-content>
-			{{ repo.description }}
+			{{ lesson.description }}
+			<div *ngIf="lesson.showIn > 0">Available in {{lesson.showIn}}ms</div> 
 		</ion-card-content>
 	</ion-card>
 

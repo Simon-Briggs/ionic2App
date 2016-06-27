@@ -15,7 +15,23 @@ import {GitHubService} from '../../services/github';
 	directives: [FORM_DIRECTIVES, CHART_DIRECTIVES, NgClass, CORE_DIRECTIVES]
 })
 export class HomePage {
-	public foundRepos;
+	public lessons = [{
+		title: "lesson 1",
+		description: "no",
+		showIn : 0
+	},{
+		title: "lesson 2",
+		description: "yes",
+		showIn : 24 * 60 * 60 *1000
+	},{
+		title: "lesson 3",
+		description: "hi",
+		showIn : 2 * 24 * 60 * 60 *1000
+	},{
+		title: "lesson 4",
+		description: "learn stuff",
+		showIn : 3 * 24 * 60 * 60 *1000
+	}];
 	public username: string;
 	public range: number;
 	public Firebase;
@@ -74,26 +90,20 @@ export class HomePage {
 	}
 
 	getRepos() {
-		this.github.getRepos(this.username).subscribe(
-			data => {
-				this.foundRepos = data.json();
-			},
-			err => console.error(err),
-			() => console.log('getRepos completed')
-		);
+		console.log("doing nothing lol");
 	}
 
-	goToDetails(repo) {
-        console.log("going to details");
+	goToLesson(lesson) {
+        console.log("going to", lesson);
 	}
 
 	getData() {
-		var ref = MyFirebase.database.ref("/");
+		var ref = MyFirebase.database.ref("/users");
 		// Attach an asynchronous callback to read the data at our posts reference
 		ref.once("value", function (snapshot) {
 			console.log(snapshot.val());
 		}, function (errorObject) {
-			console.log("The read failed: " + errorObject.code);
+			console.log("The read failed: " + errorObject);
 		});
 
 		// Create a callback which logs the current auth state

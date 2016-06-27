@@ -20,5 +20,6 @@ export class MyFirebase {
 	public static database = MyFirebase._firebase.database();
 	public static rootRef = MyFirebase._firebase.database().ref();
 	public static auth = MyFirebase._firebase.auth();
+	public static now = MyFirebase._firebase.database.ServerValue.TIMESTAMP;
 
 }
